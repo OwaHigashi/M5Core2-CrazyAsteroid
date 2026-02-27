@@ -31,6 +31,10 @@ bool CollisionDistance = false;
 
 int help1 = 0;
 
+int iShootMiss = 0;        // miss animation frame counter (0=inactive)
+int ShootMissX0 = 0;       // beam origin X
+int ShootMissY0 = 0;       // beam origin Y
+
 int CountHit = 0;
 
 #define Asteroid1H      20     // screen height SpaceShip
@@ -132,16 +136,42 @@ void loop() {
     }
   }
 
-  if (M5.BtnB.isPressed()) {
-    if (Asteroid1Locked) {
-      Asteroid1Hit = true;
+  // Shoot: BtnB or tap on display area (y < 240)
+  {
+    bool shootInput = M5.BtnB.isPressed() || M5.BtnB.wasPressed();
+    if (M5.Touch.points > 0 && M5.Touch.point[0].y < 240) {
+      shootInput = true;
     }
+    if (shootInput) {
+      if (Asteroid1Locked) {
+        Asteroid1Hit = true;
+      }
+      if (Asteroid2Locked) {
+        Asteroid2Hit = true;
+      }
+      if (Asteroid3Locked) {
+        Asteroid3Hit = true;
+      }
+      // Miss: no asteroid locked, fire empty beam animation
+      if (!Asteroid1Locked && !Asteroid2Locked && !Asteroid3Locked && iShootMiss == 0) {
+        iShootMiss = 1;
+        ShootMissX0 = PosSpaceShip + SpaceShipW;
+        ShootMissY0 = TFTH - SpaceShipH * 2 - LevelPosPlus;
+      }
+    }
+  }
 
-    if (Asteroid2Locked) {
-      Asteroid2Hit = true;
+  // Miss beam animation
+  if (iShootMiss > 0) {
+    if (iShootMiss == 1) {
+      // Draw miss beam: orange triangle going straight up from ship
+      M5.Lcd.fillTriangle(ShootMissX0, ShootMissY0, ShootMissX0 - 3, ShootMissY0 - 60, ShootMissX0 + 3, ShootMissY0 - 60, M5.Lcd.color565(255, 165, 0));
     }
-    if (Asteroid3Locked) {
-      Asteroid3Hit = true;
+    iShootMiss++;
+    if (iShootMiss > 5) {
+      // Erase miss beam
+      M5.Lcd.fillTriangle(ShootMissX0, ShootMissY0, ShootMissX0 - 3, ShootMissY0 - 60, ShootMissX0 + 3, ShootMissY0 - 60, BLACK);
+      iShootMiss = 0;
     }
   }
 

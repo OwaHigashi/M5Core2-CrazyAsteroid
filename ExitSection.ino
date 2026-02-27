@@ -4,6 +4,7 @@
 void startExitSection () {
   M5.update();
   if (z == 3000) {
+    M5.Lcd.fillScreen(BLACK);
     M5.Lcd.setCursor(0, 100);
     M5.Lcd.setTextColor(M5.Lcd.color565(255, 131, 250));
     M5.Lcd.setTextSize(3);
@@ -34,7 +35,9 @@ void startExitSection () {
         LevelPosPlus = 20;
         Level = -3;
         CountHit = 0;
-        M5.Lcd.fillRect(1, 1, 264, 240, BLACK);
+        iShootMiss = 0;
+        M5.Lcd.fillScreen(BLACK);
+        M5.Lcd.fillRect(265, 1, 55, 240, M5.Lcd.color565(117, 117, 117));
         M5.Lcd.setRotation(0);
         M5.Lcd.setTextSize(3);
         M5.Lcd.setCursor(10, 290);
@@ -42,12 +45,14 @@ void startExitSection () {
         M5.Lcd.print("Score: ");
         M5.Lcd.setTextColor(M5.Lcd.color565(117, 117, 117));
         M5.Lcd.print(z / 20);
+        M5.Lcd.setRotation(1);
         z = 0;
         break;
       }
     }
   }
   if (CollisionDistance) {
+    M5.Lcd.fillScreen(BLACK);
     M5.Lcd.setCursor(0, 100);
     M5.Lcd.setTextColor(M5.Lcd.color565(255, 131, 250));
     M5.Lcd.setTextSize(3);
@@ -89,7 +94,9 @@ void startExitSection () {
         }
         LevelPosPlus = 20;
         Level = -3;
-        M5.Lcd.fillRect(1, 1, 264, 240, BLACK);
+        iShootMiss = 0;
+        M5.Lcd.fillScreen(BLACK);
+        M5.Lcd.fillRect(265, 1, 55, 240, M5.Lcd.color565(117, 117, 117));
         M5.Lcd.setRotation(0);
         M5.Lcd.setTextSize(3);
         M5.Lcd.setCursor(10, 290);
@@ -97,6 +104,7 @@ void startExitSection () {
         M5.Lcd.print("Score: ");
         M5.Lcd.setTextColor(M5.Lcd.color565(117, 117, 117));
         M5.Lcd.print(z / 20);
+        M5.Lcd.setRotation(1);
         z = 0;
         break;
       }
